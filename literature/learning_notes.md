@@ -224,3 +224,75 @@ Different methods answer this question by changing:
 - How the resulting representations are used for downstream tasks.
 
 Understanding these differences is more important at this stage than memorizing the exact architecture of each model.
+
+
+## 2. FaceNet — Schroff et al. (2015)
+
+**Paper:** [FaceNet: A Unified Embedding for Face Recognition and Clustering](https://openaccess.thecvf.com/content_cvpr_2015/html/Schroff_FaceNet_A_Unified_2015_CVPR_paper.html)
+
+### 2.1 Questions to Answer
+
+1. What an embedding is;
+2. Why distance between embeddings can represent similarity;
+3. Triplet loss and anchor/positive/negative;
+4. Difference between classification vs metric learning
+
+### 2.2 Embedding
+
+**Embedding**: a numerical representation (a list of numbers) that a neural network (NN) learns to describe important features of an inpt, such as a face.
+
+- E.g. FaceNet converts a face image into an embedding like [0.21, -0.53, 0.87, ...]. Images of the same person have similar embeddings, and images of different people have more distant embeddings.
+
+### 2.3 Research Question and Embedding Space
+
+**Research question:** Can faces be mapped directly into an **embedding space** where distance corresponds to facial identity similarity?
+
+- Mapping here means to use a NN to convert a face image into numbers that determine where the point sits on the embedding space, which is analogous to points' distances on an Euclidean space.
+
+### 2.4 Evaluation with LFW
+
+**Evaluation with LFW:** LFW evaluates face verification using 6,000 predefined pairs of face images: 3,000 pairs of the same person and 3,000 pairs of different people.
+
+- The general evaluation procedure is standardized: researchers test their models on the same 6,000 face pairs using the same 10 fold evaluation protocol;
+- FaceNet converts each image into a numerical embedding, then calculates the Euclidean distance between any two embeddings. If the distance is below a chosen threshold, it predicts "same person"; otherwise, "different people." *This approach where the model learns to represent images so that similar ones are close together and different ones are farther apart in embedding space, is called* **metric learning**.
+- **Representation learning:** A broad approach where a model learns useful features (embeddings) from data [For future papers]. *Metric learning* is one approach to representation learning. DeepFace learns representations through classification, while FaceNet learns them directly through similarity relationships.
+
+### 2.5 Youtube Faces (YTF)
+
+**Youtube Faces (YTF):** a face verification dataset containing 3425 video clips of 1595 people.
+
+- Compared to images, videos introduce additional challenges such as movement, changing facial angles, blur and lighting.
+
+### 2.6 DeepFace vs. FaceNet in Their Training Objectives
+
+Both have the ultimate task of face verification.
+
+- **DeepFace - identity classification:** Trains the network to classify a face among known identities, which also learns facial embeddings (indirect). Then, the learned facial embeddings are used for face verification.
+- **FaceNet - distance based metric learning:** Trains the network directly to produce embeddings where same person images are close together, using **triplet loss**.
+
+### 2.7 Triplet as Input Representation
+
+- **Anchor:** the reference photo (e.g., Alice's 1st photo)
+- **Positive:** Another image of the *same* person (e.g., Alice's 2nd photo)
+- **Negative:** An image of a different person (e.g., Bob's photo)
+
+### 2.8 Triplet Loss
+
+**Triplet loss:** a loss function that measures how well a neural network separates images of different people while keeping images of the same person close together in embedding space. For example, if the negative is not sufficiently far away from the anchor than the positive, *triplet loss penalizes the model, encouraging it to adjust its embeddings*.
+
+- In other words, the goal is to make the anchor-negative distance larger than the anchor-positive distance by at least a specified margin.
+
+### 2.9 Online Triplet Mining
+
+**Online triplet mining:** Online triplet mining is the process of selecting useful anchor–positive–negative triplets during model training; It focuses on challenging examples where the model struggles to distinguish identities, since easy triplets contribute little to further learning.
+
+- This automatically happens during training, but researchers must first program the rules for selecting triplets.
+- **Offline (triplets prepared beforehand):** Researchers or an algorithm select triplets before training, using a fixed selection or periodically updated selections.
+- **Online:** During training, an algorithm automatically examines the model's current embeddings and selects challenging triplets, usually from the current batch of images.
+- *The key advantage:* As the model improves, online triplet mining can adapt which triplets are considered difficult, rather than relying on a fixed set.
+
+### 2.10 FaceNet Evaluates 3 Types of Performances
+
+- **Face verification (accuracy):** Given 2 photos, does the model correctly determine if they are the same person; accuracy measures the percentage of correct decisions;
+- **Face recognition:** Given a face, can the model *identify* the person by comparing it with *known* identities;
+- **Face clustering:** Without being told their identities, can the model automatically group photos of the same person together.

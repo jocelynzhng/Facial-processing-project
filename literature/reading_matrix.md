@@ -41,3 +41,64 @@
 **Key takeaway:** FaceNet shifted the problem from "Which identity is this?" to "How close are these two faces in a learned representation space?"
 
 ---
+
+## 3. ArcFace — Deng et al. (2019)
+
+**Paper:** *ArcFace: Additive Angular Margin Loss for Deep Face Recognition*
+
+| Field | Summary |
+|---|---|
+| **Research Question** | How can the loss function make face embeddings more compact within identities and more separated between different identities? |
+| **Data** | Large-scale face-recognition datasets with evaluation across 10 established face-recognition benchmarks, covering different challenges, such as image quality, pose variations, and video recognition. |
+| **Target** | Face identity / verification / recognition. |
+| **Input Representation** | Aligned facial images passed through a deep CNN to produce normalized embedding vectors. |
+| **Method** | Deep CNN + Additive Angular Margin Loss (ArcFace). Faces are represented on a normalized hypersphere and identities are separated using angular margins. |
+| **Validation** | Uses standard benchmark-specific verification and identification protocols. |
+| **Evaluation** | Verification accuracy, identification rates, TAR/FAR, and other benchmark-specific recognition metrics. |
+| **Main Result** | Improved performance over previous margin-based face-recognition methods across numerous benchmarks. |
+| **Limitations** | Requires large identity-labelled datasets; primarily designed for identity discrimination rather than other facial properties such as emotion or perception; potential dataset bias. |
+| **Relevance to Project** | Demonstrates how changing the loss function can significantly improve the quality and geometry of learned visual representations. |
+
+**Key takeaway:** ArcFace improved face embeddings by explicitly increasing angular separation between identities.
+
+---
+## 4. Vision Transformer (ViT) — Dosovitskiy et al. (2021)
+
+**Paper:** *An Image Is Worth 16×16 Words: Transformers for Image Recognition at Scale*
+
+| Field | Summary |
+|---|---|
+| **Research Question** | Can a Transformer, without a CNN backbone, effectively learn visual representations from images? |
+| **Data** | Large labelled datasets including ImageNet-21k and JFT-300M; evaluated on ImageNet, CIFAR-10/100, VTAB, and other datasets. |
+| **Target** | Primarily general image classification, not facial identity specifically. |
+| **Input Representation** | Image → divided into fixed-size patches (e.g., 16×16) → flattened → converted into patch embeddings → positional information added. |
+| **Method** | Vision Transformer (ViT) using multi-head self-attention instead of convolution as the primary image-processing mechanism. |
+| **Validation** | Pretrained on large datasets and evaluated/fine-tuned on separate established datasets. |
+| **Evaluation** | Primarily top-1 image-classification accuracy. |
+| **Main Result** | Demonstrated that pure Transformers can match or outperform strong CNNs when pretrained on sufficiently large datasets. |
+| **Limitations** | Data hungry; requires substantial pretraining; large models are computationally expensive. |
+| **Relevance to Project** | Introduces the major architecture transition from CNNs to Transformers and provides the architectural basis for later models such as DINO. |
+
+**Key takeaway:** ViT demonstrated that images can be processed as sequences of patches using Transformer attention rather than convolution.
+
+---
+## 4. Vision Transformer (ViT) — Dosovitskiy et al. (2021)
+
+**Paper:** *An Image Is Worth 16×16 Words: Transformers for Image Recognition at Scale*
+
+| Field | Summary |
+|---|---|
+| **Research Question** | Can a Transformer, without a CNN backbone, effectively learn visual representations from images? |
+| **Data** | Large labelled datasets including ImageNet-21k and JFT-300M; evaluated on ImageNet, CIFAR-10/100, VTAB, and other datasets. |
+| **Target** | Primarily general image classification, not facial identity specifically. |
+| **Input Representation** | Image → divided into fixed-size patches (e.g., 16×16) → flattened → converted into patch embeddings → positional information added. |
+| **Method** | Vision Transformer (ViT) using multi-head self-attention instead of convolution as the primary image-processing mechanism. |
+| **Validation** | Pretrained on large datasets and evaluated/fine-tuned on separate established datasets. |
+| **Evaluation** | Primarily top-1 image-classification accuracy. |
+| **Main Result** | Demonstrated that pure Transformers can match or outperform strong CNNs when pretrained on sufficiently large datasets. |
+| **Limitations** | Data hungry; requires substantial pretraining; large models are computationally expensive. |
+| **Relevance to Project** | Introduces the major architecture transition from CNNs to Transformers and provides the architectural basis for later models such as DINO. |
+
+**Key takeaway:** ViT demonstrated that images can be processed as sequences of patches using Transformer attention rather than convolution.
+
+---

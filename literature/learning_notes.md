@@ -296,3 +296,77 @@ Both have the ultimate task of face verification.
 - **Face verification (accuracy):** Given 2 photos, does the model correctly determine if they are the same person; accuracy measures the percentage of correct decisions;
 - **Face recognition:** Given a face, can the model *identify* the person by comparing it with *known* identities;
 - **Face clustering:** Without being told their identities, can the model automatically group photos of the same person together.
+
+## 3. ArcFace — Deng et al. (2019)
+
+**Paper:** [ArcFace: Additive Angular Margin Loss for Deep Face Recognition](https://openaccess.thecvf.com/content_CVPR_2019/html/Deng_ArcFace_Additive_Angular_Margin_Loss_for_Deep_Face_Recognition_CVPR_2019_paper.html)
+
+### 3.1 Loss Function
+
+**Loss function:** measures how far a NN's predictions or learned representations are from the desired result. During *training*, the model adjusts its weights to minimize the loss, and encourages the model to learn:
+
+- **DeepFace (Softmax cross-entropy loss):** to correctly classify a face among *known* identities;
+- **FaceNet (Triplet loss):** to keep embeddings of the same person close together and different people farther apart;
+- **ArcFace (Additive angular margin loss):** classify identities correctly while enforcing greater angular separation between different identities in embedding space;
+- ArcFace returns to a classification-based training approach like DeepFace, but modifies the loss function to encourage more discriminative face embeddings.
+
+### 3.2 Face Identity, Verification, and Recognition
+
+- **Face identity (training target):** Learns what the facial features are for a person based on/given a dataset;
+- **Face verification (1:1 matching):** Determines if two face images belong to the same person;
+- **Face recognition (1:N identification, evaluation task):** Determines who a particular person is among a database of *known* identities using a new picture.
+
+### 3.3 Evaluation Metrics
+
+- **Identification rate:** The percentage of faces the model correctly identifies from a database of known people.
+- **TAR (True Acceptance Rate):** The percentage of same-person pairs correctly accepted as the same person. **TAR + FRR** (False Rejection Rate) **= 100%**.
+- **FAR (False Acceptance Rate):** The percentage of different-person pairs incorrectly accepted as the same person. **FAR + TRR** (True Rejection Rate) **= 100%**.
+
+### 3.4 Margin-Based Methods
+
+**Margin-based methods:** training approaches that modify the *loss function* to require a larger separation between different identities in embedding space.
+
+
+## 4. Vision Transformer / ViT — Dosovitskiy et al. (2021)
+
+**Paper:** [An Image Is Worth 16×16 Words: Transformers for Image Recognition at Scale](https://arxiv.org/abs/2010.11929)
+
+### 4.1 Key Questions to Understand
+
+Paid specific attention to: **How an image becomes patches/tokens**; patch embeddings + positional embeddings + self-attention; **CNN vs Transformer**; why ViT initially needed large-scale pretraining
+
+- Unlike the previous three papers, ViT focuses on general image understanding, not specifically facial recognition.
+
+### 4.2 Datasets Used
+
+- **ImageNet-21k:** ~14 million images across 21k object categories; used for large-scale supervised pre training;
+- **JFT-300M:** ~300 million images with noisy labels across thousands of categories; even larger scale supervised pre training;
+- **ImageNet-1k:** ~1.3 million training images across 1k categories; Image classification evaluation and fine-tuning;
+- **CIFAR-10/100:** 60k small mages across 10 or 100 categories; testing performance on smaller classification datasets;
+- **VTAB:** A benchmark suite covering 19 diverse visual tasks; testing whether pre training representations (features learned from one dataset) transfer to different tasks **[transfer learning]**;
+
+### 4.3 Training Types
+
+- **Training:** A general term for teaching a model to perform a task.
+- **Pretraining:** The initial training stage, where a model learns broadly useful features before being adapted to a more specific task.
+- **Fine-tuning:** Additional training that adapts the pretrained model to that specific task.
+
+### 4.4 Transformer and Attention Mechanism
+
+**Transformer:** A type of neural network that uses **attention mechanisms** to learn relationships between different parts of its input. Unlike CNNs, which primarily examine local regions, transformers can directly relate distant parts of an image.
+
+- **Attention mechanism:** a technique that allows a NN to determine which parts of an input image (not just locally) are most relevant to one another and give them different weights when processing information.
+- E.g., When analyzing a face, a ViT can learn relationships between the eyes, nose, and mouth, even though they occupy different image regions.
+
+### 4.5 Self-Attention and Multi-Head Self-Attention
+
+- **Self-attention:** A mechanism that lets each part of an image determine how much information to gather from other parts.
+- **Multi-head self-attention:** Instead of calculating attention just once, the model uses multiple attention heads in parallel, allowing it to learn different relationships simultaneously;
+  - E.g., one head might focus on relationships between facial features, while another focuses on broader visual patterns. These specializations are learned, not predefined.
+
+### 4.6 Significance of This Paper
+
+Significance of this paper: it changes what **"image representation"** means, using ViT instead of CNN.
+
+- **CNN:** local filters gradually build features;
+- **ViT:** divide the image into patches and learn relationships between them using attention.

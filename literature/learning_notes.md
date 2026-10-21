@@ -370,3 +370,103 @@ Significance of this paper: it changes what **"image representation"** means, us
 
 - **CNN:** local filters gradually build features;
 - **ViT:** divide the image into patches and learn relationships between them using attention.
+
+
+## 5. DINO — Caron et al. (2021)
+
+**Paper:** *Emerging Properties in Self-Supervised Vision Transformers*
+
+> **Paid specific attention to:** Self-supervised learning; teacher–student/self-distillation idea; why multiple views of the same image are used; what representation is learned without labels; why meaningful spatial/attention structure emerges.
+
+### 5.1 Semantic Structure
+
+- **Semantic structure:** Meaningful relationships within an image, such as which pixels belong to the same object or which regions represent different objects.
+  - E.g., DINO is trained on images without being told where the objects are, yet its learned representations can reveal the boundaries between a dog and its background.
+  - **Why evaluate this?** Researchers want to see whether DINO has learned meaningful visual concepts, rather than just patterns useful for image classification. This is especially interesting because it learns without human-provided labels.
+  - **Key takeaway:** Meaningful visual structure can emerge from self-supervised learning, making its representations potentially useful for facial and perceptual analysis.
+
+### 5.2 Self-Supervised Learning
+
+- Learning patterns useful for image classification does not necessarily require human-provided labels.
+  - **Supervised learning** (e.g., original ViT): Uses labelled images (e.g., "dog," "cat") to learn features that help classify objects.
+  - **Self-supervised learning** (e.g., DINO): Learns visual features without human labels, but it is still given a specific learning objective. For DINO, this involves learning representations from different modified views of the same image.
+  - In other words, self-supervised learning is NOT simply letting the model learn whatever it wants. Researchers still design the learning task; they just don't need humans to label the training images.
+
+- Self-supervised learning is a form of **unsupervised learning**, but the reverse is not always true. For example, K-means clustering:
+  - **K-means:** Groups similar data points into clusters. *Grouping is the task.*
+  - **DINO:** Learns useful visual representations by training different views of the same image to produce consistent outputs. *Learning these representations is the task.*
+
+- **Key distinction:** Labels are not required to learn useful visual representations, although labels are often used later to train or evaluate a classifier.
+
+### 5.3 Input Representation
+
+- DINO uses different modified (e.g., augmented/cropped) versions of the same image to teach the model to recognize consistent visual features despite changes in appearance.
+
+### 5.4 Method — Self-Distillation
+
+- DINO uses two neural networks during training: **teacher and student networks**.
+  - **Teacher network:** Produces a probability distribution from one view of an image.
+  - **Student network:** Processes another view of the same image and learns to match the teacher's probability distribution. This is the *learning objective* of DINO.
+
+- **Why use a probability distribution?** It expresses how strongly the network associates an image with different learned visual patterns.
+
+- **Distillation:** Transferring knowledge from a teacher model to a student model.
+- **Self-distillation:** The student learns by adjusting its *weights* to match the teacher's predictions, and the teacher is updated using a **moving average** of the student's weights.
+  - **Key point:** The teacher and student *develop together* during training. The direction of influence is both ways, but only the student is directly trained by minimizing the loss function.
+  - The teacher isn't necessarily more "knowledgeable" than the student, but it provides more **stable** probability distributions because its weights are smoothed using the moving average.
+
+### 5.5 Evaluation
+
+#### K-Nearest Neighbours (k-NN)
+
+- Converts an image into an embedding, then finds the *k* most similar embeddings from labelled examples.
+- A prediction is made about the image's category based on its nearest neighbours.
+
+#### Linear Probing
+
+- Freezes DINO's pretrained network (i.e., doesn't change its weights).
+- Trains a simple linear classifier using the embeddings and labelled examples.
+- The classifier is tested on whether it can correctly distinguish categories in new images.
+
+**Key point:** Both methods evaluate how useful DINO's learned representations are.
+
+#### Qualitative and Quantitative Evaluation
+
+Researchers evaluate whether DINO's attention patterns reveal meaningful objects and regions within images using two approaches:
+
+- **Qualitative (visual inspection):** Researchers look at attention maps to see whether DINO naturally focuses on meaningful regions, such as a dog's body rather than the background.
+- **Quantitative (numerical measurement):** Researchers measure how accurately those regions match actual object boundaries using metrics such as **IoU (Intersection over Union)**, which measures how much two regions overlap.
+- **Example:** If DINO highlights a dog in an image, researchers can visually inspect the highlighted area (qualitative) and calculate how closely it matches the dog's actual outline (quantitative).
+- **Why?** This tells researchers whether DINO has learned meaningful visual structure *without* being explicitly trained to identify object boundaries.
+
+### 5.6 Attention Maps
+
+- An **attention map** is a visual representation showing how strongly different parts of an image receive attention from the model. It's a heatmap generated from attention weights.
+  - E.g., in a picture of a dog standing on grass, an attention map might highlight the dog's body more strongly than the surrounding grass.
+  - In ViT, researchers can visualize how strongly the classification token attends to different image patches.
+
+### 5.7 Limitations
+
+- The teacher–student training design requires additional memory and computation because there are two networks.
+- Researchers must carefully configure the teacher's moving-average updates, prediction distributions, and techniques that prevent representation collapse.
+
+---
+
+## 6. AdaFace — Kim, Jain & Liu (2022)
+
+**Paper:** *AdaFace: Quality Adaptive Margin for Face Recognition*
+
+> **Paid specific attention to:** Image quality as a learning problem; why low-quality ≠ useful hard example; how quality-adaptive margins modify face learning.
+
+### 6.1 Image Quality and Feature Norm
+
+- AdaFace uses the **norm (magnitude) of the network's feature vector** as an indirect estimate of face-image quality.
+  - A larger feature norm generally indicates higher recognizability.
+  - A smaller feature norm generally indicates lower recognizability.
+  - This is a correlation, not a guaranteed measure of image quality.
+
+### 6.2 Quality-Adaptive Margin
+
+- **Quality-adaptive margin:** AdaFace adjusts how it trains based on estimated image quality.
+  - **Margin loss:** A *loss function* that calculates a training penalty when the model's predictions do not satisfy a desired separation between identities.
+  - The penalty is used through backpropagation to adjust the neural network's weights, helping it distinguish different people's faces more clearly.

@@ -82,23 +82,43 @@
 **Key takeaway:** ViT demonstrated that images can be processed as sequences of patches using Transformer attention rather than convolution.
 
 ---
-## 4. Vision Transformer (ViT) — Dosovitskiy et al. (2021)
+## 5. DINO — Caron et al. (2021)
 
-**Paper:** *An Image Is Worth 16×16 Words: Transformers for Image Recognition at Scale*
+**Paper:** *Emerging Properties in Self-Supervised Vision Transformers*
 
 | Field | Summary |
 |---|---|
-| **Research Question** | Can a Transformer, without a CNN backbone, effectively learn visual representations from images? |
-| **Data** | Large labelled datasets including ImageNet-21k and JFT-300M; evaluated on ImageNet, CIFAR-10/100, VTAB, and other datasets. |
-| **Target** | Primarily general image classification, not facial identity specifically. |
-| **Input Representation** | Image → divided into fixed-size patches (e.g., 16×16) → flattened → converted into patch embeddings → positional information added. |
-| **Method** | Vision Transformer (ViT) using multi-head self-attention instead of convolution as the primary image-processing mechanism. |
-| **Validation** | Pretrained on large datasets and evaluated/fine-tuned on separate established datasets. |
-| **Evaluation** | Primarily top-1 image-classification accuracy. |
-| **Main Result** | Demonstrated that pure Transformers can match or outperform strong CNNs when pretrained on sufficiently large datasets. |
-| **Limitations** | Data hungry; requires substantial pretraining; large models are computationally expensive. |
-| **Relevance to Project** | Introduces the major architecture transition from CNNs to Transformers and provides the architectural basis for later models such as DINO. |
+| **Research Question** | What visual representations emerge when a Vision Transformer is trained without human-provided labels? |
+| **Data** | Primarily ImageNet images; labels are not used during DINO pretraining. |
+| **Target** | No conventional target label during pretraining. The objective is to learn general visual representations. |
+| **Input Representation** | Multiple augmented/cropped views of the same image, represented as ViT image patches. |
+| **Method** | Self-distillation with no labels (DINO). Teacher and student networks receive different views of an image and are encouraged to produce consistent representations. |
+| **Validation** | Learned representations are evaluated using methods such as k-nearest-neighbour classification and linear evaluation. |
+| **Evaluation** | ImageNet k-NN accuracy, linear-probe accuracy, and analysis of learned attention/semantic structure. |
+| **Main Result** | A small self-supervised ViT achieved 78.3% ImageNet k-NN top-1 accuracy, while ViT-Base achieved 80.1% top-1 under linear evaluation. Attention maps also revealed meaningful semantic object structure without segmentation labels. |
+| **Limitations** | Significant computational requirements; performance depends on augmentation and teacher/student training design; not specifically designed for faces. |
+| **Relevance to Project** | Highly relevant to visual perception because it demonstrates that meaningful visual structure can emerge without explicit labels. Useful when working with relatively small labelled datasets. |
 
-**Key takeaway:** ViT demonstrated that images can be processed as sequences of patches using Transformer attention rather than convolution.
+**Key takeaway:** DINO showed that self-supervised ViTs can learn meaningful visual and spatial representations without manually labelled training data.
+
+---
+## 6. AdaFace — Kim, Jain & Liu (2022)
+
+**Paper:** *AdaFace: Quality Adaptive Margin for Face Recognition*
+
+| Field | Summary |
+|---|---|
+| **Research Question** | Should difficult face images be treated differently depending on whether they are informative hard examples or simply low-quality/unrecognisable images? |
+| **Data** | Face-recognition training datasets; evaluation includes challenging benchmarks such as IJB-B, IJB-C, IJB-S, and TinyFace. |
+| **Target** | Face identity / recognition under varying image quality. |
+| **Input Representation** | Aligned/cropped facial images. Image quality is indirectly estimated using the norm of the network's feature vector. |
+| **Method** | Deep face-recognition network + quality-adaptive margin loss. Margin behaviour changes according to estimated image quality. |
+| **Validation** | Uses standard person-based face-recognition benchmark protocols rather than random image-level splitting. |
+| **Evaluation** | Verification and identification metrics across challenging face-recognition benchmarks. |
+| **Main Result** | Improved recognition over previous margin-loss approaches on several challenging low-quality face benchmarks. |
+| **Limitations** | Image quality is approximated through feature magnitude rather than directly measured; designed primarily for identity recognition. |
+| **Relevance to Project** | Relevant if facial images vary in blur, resolution, lighting, occlusion, pose, or camera conditions. Demonstrates that "hard example" and "low-quality example" should not necessarily be treated the same way. |
+
+**Key takeaway:** AdaFace makes face-recognition training quality-aware by adapting the learning margin according to estimated image quality.
 
 ---

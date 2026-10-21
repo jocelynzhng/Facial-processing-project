@@ -122,3 +122,84 @@
 **Key takeaway:** AdaFace makes face-recognition training quality-aware by adapting the learning margin according to estimated image quality.
 
 ---
+
+## 7. DINOv2 — Oquab et al. (2023)
+
+**Paper:** *DINOv2: Learning Robust Visual Features without Supervision*
+
+| Field | Summary |
+|---|---|
+| **Research Question** | Can large-scale self-supervised learning produce a general-purpose visual representation that transfers effectively to many different tasks? |
+| **Data** | Approximately 142 million curated unlabeled images (LVD-142M). |
+| **Target** | No explicit class target during pretraining. The objective is to learn useful and transferable visual representations. |
+| **Input Representation** | General natural images represented as ViT patches, with multiple augmented views used during self-supervised training. |
+| **Method** | Large-scale self-supervised Vision Transformer training incorporating self-distillation and related representation-learning techniques. |
+| **Validation** | Pretrained representations are evaluated across numerous independent downstream datasets and tasks. |
+| **Evaluation** | Multiple benchmarks covering classification, instance retrieval, semantic segmentation, depth estimation, and other visual tasks. |
+| **Main Result** | Produced strong general-purpose visual features that transfer effectively across different tasks and domains, often without full model fine-tuning. |
+| **Limitations** | Enormous training-data and compute requirements; unrealistic to train from scratch for a small research project; web-scale data may contain sampling and representation biases. |
+| **Relevance to Project** | Highly practical as a pretrained feature extractor. Facial images could be passed through DINOv2 to obtain embeddings, followed by a relatively small downstream classifier or regressor. |
+
+**Key takeaway:** DINOv2 moves toward a general visual foundation model whose pretrained representations can be reused for many downstream tasks.
+
+---
+## 8. DINOv3 — Siméoni et al. (2025)
+
+**Paper:** *DINOv3*
+
+| Field | Summary |
+|---|---|
+| **Research Question** | How far can self-supervised visual representation learning be scaled while maintaining strong dense spatial features useful for detailed visual tasks? |
+| **Data** | Large-scale unlabeled image data, scaling to approximately 1.7 billion images. |
+| **Target** | No conventional labels during core self-supervised pretraining; the objective is to learn general-purpose image and dense spatial representations. |
+| **Input Representation** | General images transformed into Vision Transformer patch tokens. |
+| **Method** | Large-scale self-supervised Vision Transformer training. Introduces techniques including Gram anchoring to maintain high-quality dense features during long training. |
+| **Validation** | Representations are evaluated across numerous independent downstream vision tasks and datasets. |
+| **Evaluation** | Classification and dense prediction benchmarks, including segmentation, detection, and other spatial visual tasks. |
+| **Main Result** | Produces very strong general-purpose and dense visual representations and extends self-supervised visual foundation models to substantially larger scales. |
+| **Limitations** | Extreme data and computational requirements for original training; not face-specific; large foundation models make it difficult to attribute improvements to a single methodological component. |
+| **Relevance to Project** | Particularly relevant if the project eventually investigates where information occurs within a face, such as facial regions, landmarks, local changes, segmentation, or other spatial representations. |
+
+**Key takeaway:** DINOv3 extends self-supervised visual representation learning toward very large foundation models with particularly strong dense/spatial representations.
+
+---
+
+# Methodological Progression
+
+| Stage | Paper | Main Change | Key Question |
+|---|---|---|---|
+| 1. Deep face learning | DeepFace | Handcrafted → deep facial features | Can deep learning learn identity-relevant facial information? |
+| 2. Metric learning | FaceNet | Classification → embedding | How should facial similarity be represented? |
+| 3. Better embedding geometry | ArcFace | Triplet/distance → angular margin | How can representations become more separable? |
+| 4. New architecture | ViT | CNN → self-attention | Does visual processing require convolution? |
+| 5. Self-supervision | DINO | Labelled → unlabeled learning | Can useful visual structure emerge without labels? |
+| 6. Image quality | AdaFace | Fixed → quality-adaptive learning | How should low-quality facial images affect training? |
+| 7. Foundation features | DINOv2 | Task-specific → general representation | Can one pretrained representation support many visual tasks? |
+| 8. Large-scale dense features | DINOv3 | General → strong dense/spatial representation | Can self-supervised learning capture detailed spatial visual information? |
+
+# Overall Synthesis
+
+The literature shows a progression from face-specific supervised deep learning toward general-purpose self-supervised visual representation learning.
+
+**DeepFace → FaceNet → ArcFace/AdaFace**
+focus primarily on face identity and improve how facial representations are learned.
+
+**ViT**
+changes the underlying architecture from convolution-based image processing to Transformer-based attention.
+
+**DINO → DINOv2 → DINOv3**
+move toward self-supervised, general-purpose visual representations that can potentially be transferred to facial and perceptual tasks without training a large model from scratch.
+
+For this project, this suggests that the research direction could be **Facial/Image Processing + Visual Perception + Deep Learning**. Possible downstream outcomes could include:
+- facial identity
+- facial similarity
+- emotion/expression
+- expression intensity
+- facial landmarks or regions
+- perceived facial traits
+- image quality
+- other perception-related outcomes
+
+A practical future pipeline could therefore be:
+
+**Facial images → pretrained visual model (e.g., DINOv2) → embeddings/features → smaller task-specific classifier or regressor**

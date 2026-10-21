@@ -374,7 +374,7 @@ Significance of this paper: it changes what **"image representation"** means, us
 
 ## 5. DINO — Caron et al. (2021)
 
-**Paper:** *Emerging Properties in Self-Supervised Vision Transformers*
+**Paper:** [Emerging Properties in Self-Supervised Vision Transformers](https://openaccess.thecvf.com/content/ICCV2021/html/Caron_Emerging_Properties_in_Self-Supervised_Vision_Transformers_ICCV_2021_paper.html)
 
 > **Paid specific attention to:** Self-supervised learning; teacher–student/self-distillation idea; why multiple views of the same image are used; what representation is learned without labels; why meaningful spatial/attention structure emerges.
 
@@ -454,7 +454,7 @@ Researchers evaluate whether DINO's attention patterns reveal meaningful objects
 
 ## 6. AdaFace — Kim, Jain & Liu (2022)
 
-**Paper:** *AdaFace: Quality Adaptive Margin for Face Recognition*
+**Paper:** [AdaFace: Quality Adaptive Margin for Face Recognition](https://openaccess.thecvf.com/content/CVPR2022/html/Kim_AdaFace_Quality_Adaptive_Margin_for_Face_Recognition_CVPR_2022_paper.html)
 
 > **Paid specific attention to:** Image quality as a learning problem; why low-quality ≠ useful hard example; how quality-adaptive margins modify face learning.
 
@@ -470,3 +470,80 @@ Researchers evaluate whether DINO's attention patterns reveal meaningful objects
 - **Quality-adaptive margin:** AdaFace adjusts how it trains based on estimated image quality.
   - **Margin loss:** A *loss function* that calculates a training penalty when the model's predictions do not satisfy a desired separation between identities.
   - The penalty is used through backpropagation to adjust the neural network's weights, helping it distinguish different people's faces more clearly.
+
+---
+
+## 7. DINOv2 — Oquab et al. (2023)
+
+**Paper:** [DINOv2: Learning Robust Visual Features without Supervision](https://arxiv.org/abs/2304.07193)
+
+> **Paid specific attention to:** Pretrained feature extraction; what DINOv2 embeddings/features contain; frozen backbone vs. fine-tuning; how general visual features transfer to a new task; how I could use DINOv2 on my facial dataset.
+
+### 7.1 Semantic Segmentation
+
+- **Semantic segmentation:** Dividing an image into regions and assigning each pixel a category, such as person, dog, car, or background.
+
+### 7.2 DINO vs. DINOv2
+
+- DINOv2 builds on DINO's ideas and training methods. It is not simply the original DINO model applied to a new dataset.
+- DINOv2 introduces improvements to the training approach, data preparation, and model development to produce more general-purpose visual representations.
+
+### 7.3 Sampling Bias vs. Representation Bias
+
+- **Sampling bias:** Some types of images or people appear more frequently in the training dataset than others.
+- **Representation bias:** The features learned by the model may reflect those imbalances, making it better at representing some types of images or people than others.
+  - **Example:** If certain demographic groups are underrepresented, the model's embeddings might distinguish identities less reliably for those groups.
+  - **Key distinction:** Sampling bias refers to imbalances in the training data, while representation bias refers to how those imbalances may influence what the model learns and how well it performs.
+
+### 7.4 Approaches to Using DINOv2
+
+| Approach | What happens | Practical for my project? |
+|---|---|---|
+| **Training from scratch** | Build and train the model using a massive image dataset. | No, very expensive. |
+| **Feature extraction** | Use pretrained DINOv2 to generate embeddings for our images. | **Yes, recommended starting point.** |
+| **Fine-tuning** | Start with pretrained DINOv2 and update some or all weights using our dataset. | Potentially, depending on data and resources. |
+
+### 7.5 Relevance to My Project
+
+- **Idea for project:** Reuse the already-trained DINOv2 model to extract visual features (embeddings) from our own facial images.
+- This would allow us to evaluate whether DINOv2's pretrained representations are useful for our dataset without training the entire model from scratch.
+
+---
+
+## 8. DINOv3 — Siméoni et al. (2025)
+
+**Paper:** [DINOv3](https://arxiv.org/abs/2508.10104)
+
+> **Paid specific attention to:** What changed from DINOv2 to DINOv3; especially dense/spatial features and why they matter; understand Gram anchoring conceptually; whether dense features could matter for facial regions.
+
+### 8.1 Dense Spatial Features
+
+- **Dense:** Information is available across many locations in the image, rather than only one summary for the entire image.
+- **Spatial:** Information about where things are in an image and how different regions relate to each other.
+- **Dense spatial features:** Learned visual information about many individual regions of an image, including their characteristics and spatial relationships.
+
+### 8.2 Gram Anchoring
+
+In DINOv3, researchers observed that during prolonged training:
+
+- **Global features** could *continue improving*, helping the model understand an image as a whole.
+- **Dense spatial features** could *deteriorate*, becoming less effective at distinguishing individual regions and preserving their relationships.
+- **Gram anchoring** helps prevent the model from losing detailed spatial information about different image regions during prolonged training.
+
+### 8.3 Model Size
+
+- **Model size:** How large the neural network is, usually measured by its number of parameters (learnable weights).
+
+### 8.4 Frozen vs. Adapted Representations
+
+- **Frozen representation:** The pretrained model is used *without* changing its weights.
+- **Adapted representation:** The pretrained model is modified or built upon for a specific purpose.
+  - **Relevance to my project:** Could start with frozen DINOv3 embeddings and consider adaptation later if needed.
+
+### 8.5 Foundation-Model Evaluation
+
+- **Foundation-model evaluation:** Testing how well a large, general-purpose pretrained model performs across many different tasks and datasets.
+
+### 8.6 Relevance to My Project
+
+- DINOv3 represents a major advancement in visual representation learning and could be useful for my project's analysis of facial images, particularly if we later investigate specific facial regions and features associated with expressions or emotions.
